@@ -27,8 +27,10 @@ char *v_ifdown = "@(#)ifdown.c  1.11  02-Jun-1998  miquels@cistron.nl";
  */
 int ifdown(void)
 {
+#ifndef __BIONIC__
 	struct if_nameindex *ifa, *ifp;
 	struct ifreq ifr;
+#endif
 	int fd, shaper;
 
 	if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -36,7 +38,7 @@ int ifdown(void)
 		perror("socket");
 		return -1;
 	}
-
+#ifndef __BIONIC__
 	if ((ifa = if_nameindex()) == NULL) {
 		fprintf(stderr, "ifdown: ");
 		perror("if_nameindex");
@@ -68,6 +70,7 @@ int ifdown(void)
 
 		}
 	}
+#endif
 	close(fd);
 
 	return 0;
